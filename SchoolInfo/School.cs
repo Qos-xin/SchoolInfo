@@ -1,10 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SchoolInfo
 {
@@ -23,7 +21,7 @@ namespace SchoolInfo
                 {
                     Console.Write(item.InnerText);
                     GetSchoolInfo(item.GetAttributeValue("href", ""));
-                    Console.Write(Environment.NewLine);                    
+                    Console.Write(Environment.NewLine);
                 }
             }
         }
@@ -46,11 +44,14 @@ namespace SchoolInfo
                     Console.Write("^");
                 var info = root.SelectSingleNode("//div[@class='left']/div[@class='info cl']/div[9]");
                 var text = info.InnerText;
-                var match = Regex.Match(text, "\\d+[人余]{1}");
+                var match = Regex.Match(text, "\\d+[余][人多]{1}");
                 if (match.Success)
                 {
                     Console.Write("^" + match.Value);//3000人
-                    Console.Write("^" + text.Substring(match.Index - 10, 20));//30000余人
+                    var startIndex = 0;
+                    if (match.Index > 8)
+                        startIndex = match.Index - 8;
+                    Console.Write("^" + text.Substring(startIndex, 20));//30000余人
                 }
             }
 
